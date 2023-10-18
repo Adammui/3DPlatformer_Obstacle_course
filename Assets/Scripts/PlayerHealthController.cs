@@ -4,16 +4,14 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+
 public class PlayerHealthController : MonoBehaviour
 {
+    private GameController _gameController;
 
     [SerializeField]
     private int healthInitial = 3;
     public int healthCurrent;
-
-    [SerializeField]
-    //private GameObject _hp;
-    private GameObject _defeatUI, _winUI;
 
     // Is called automatically before the first frame update
     void Start()
@@ -32,8 +30,7 @@ public class PlayerHealthController : MonoBehaviour
 
         imgObject.transform.SetParent(_canvas.transform);
         */
-        //_defeatUI = GameObject.Find("Defeat UI");
-        //_winUI = GameObject.Find("Win UI");
+        _gameController = GetComponent<GameController>();
         ResetHealth();
     }
 
@@ -60,18 +57,18 @@ public class PlayerHealthController : MonoBehaviour
     }
 
     // Handles all the stuff when player looses all hp
-    public void HandleDeath()
-    {
+    //public void HandleDeath()
+    //{
         
-        _defeatUI.SetActive(true);
-        Time.timeScale = 0;
+        //_defeatUI.SetActive(true);
+       // Time.timeScale = 0;
         // animation
 
         // spawn system - reset game
         // game system counts time from start to finish and shows interface
         // - win and loose also counts number of deaths
 
-    }
+    //}
 
     // Reduces player's current health
     public void TakeDamage(int damageAmount)
@@ -81,7 +78,7 @@ public class PlayerHealthController : MonoBehaviour
 
         if (healthCurrent <= 0)
         {
-            HandleDeath();
+            _gameController.HandleDefeat();
         }
     }
 

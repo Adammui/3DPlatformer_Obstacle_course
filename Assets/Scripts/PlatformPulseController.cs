@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlatformPulseController : MonoBehaviour
 {
     [SerializeField]
@@ -90,7 +91,6 @@ public class PlatformPulseController : MonoBehaviour
         // changing color back to basic state
         this.GetComponent<MeshRenderer>().material = _materialInteractive;
         StartCoroutine(CooldownCoroutine());
-
     }
 
     // Provides cooldown for platform attack cycle
