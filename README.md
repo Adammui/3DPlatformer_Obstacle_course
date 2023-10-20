@@ -1,5 +1,5 @@
 # 3DPlatformer_likeFallguys - simple platformer
-# With little fox i found  `model by` [`bonfire`](https://sketchfab.com/bonfire.png)
+# With little fox in cape i found  `by` [`bonfire`](https://sketchfab.com/bonfire.png)
 ## Description
 Test task project. This project is created mainly for testing my abilities, i wanted to see how much i will be able to do from the idea i had. 
 I spent like 3 full evenings on this, mostly studying the things i dont know or remember and just thinking about stuff. I had fun and am planning to finish it some time later. <br>
@@ -32,7 +32,15 @@ will damage anyone standing on the block (by blinking red). After dealing damage
 
 ## Video
 showcase of main task with 2 particular logic blocks - pulse and wind. 
+
 https://github.com/Adammui/3DPlatformer_likeFallguys/assets/53793144/b64f623b-f8f0-41fc-91e6-ef4ae3241891
 
 running around and winning game.
+
 https://github.com/Adammui/3DPlatformer_likeFallguys/assets/53793144/eb33311b-a89e-4c46-b31b-596241f056c6
+
+## Reference
+[`@agoodboygames`](https://www.youtube.com/@agoodboygames) used some of his code while creating movement <br>
+[`@iHeartGameDev`](https://www.youtube.com/@iHeartGameDev) overall a lot of info <br>
+[`discussions.unity.com`](https://discussions.unity.com)   :^/ <br> 
+model of fox by [`bonfire`](https://sketchfab.com/bonfire.png) REALLY CUTE THING <br>
