@@ -20,6 +20,10 @@ public class StartUIController : MonoBehaviour
     }
     public void LoadScene()
     {
-        SceneManager.LoadScene(levelScene, LoadSceneMode.Single);
+        SceneManager.LoadScene(levelScene);
+    }
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
