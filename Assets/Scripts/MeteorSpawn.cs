@@ -13,21 +13,26 @@ public class MeteorSpawn : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        InvokeRepeating("SpawnObject", spawnTime, spawnDelay);
+        InvokeRepeating("ObjectSpawn", spawnTime, spawnDelay);
     }
+
+    // Should destroy object when it is colliding with start platform. Currently nis now working
     void OnCollisionEnter(Collision coll)
     {
         if (coll.gameObject.name == "Start")
         {
-            Destruction();
+            ObjectDestroy();
         }
     }
 
-    void Destruction()
+    //Destroys object to which this script is assigned
+    void ObjectDestroy()
     {
         Destroy(this.gameObject);
     }
-    public void SpawnObject()
+
+    //Spawns new object in position where current object with this script is located
+    public void ObjectSpawn()
     {
         Instantiate(spawnee, transform.position, transform.rotation);
     }

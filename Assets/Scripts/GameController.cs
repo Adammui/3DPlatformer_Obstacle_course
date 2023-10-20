@@ -22,13 +22,10 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        
-        //_endGameUI = GameObject.Find("End-Game UI");
-        //_endGameUI.SetActive(false);
         InvokeRepeating("UpdateScreenTime", 0, 1.0f);
     }
 
-    // Update is called once per second
+    // Update is called once per second. Displays current time in game
     void UpdateScreenTime()
     {
         if (_timerIsRunning)
@@ -37,16 +34,17 @@ public class GameController : MonoBehaviour
         }
     }
 
+    // Called when trigger tracked collider leaving zone - start zone
     void OnTriggerExit(Collider collider)
     {
         Debug.Log("player exited: "+collider.tag);
         if (collider.tag == _startPlatformName)
         {
-            
             TimerStart();
         }
     }
 
+    // Called when trigger tracked some collider 
     void OnTriggerEnter(Collider collider)
     {
         Debug.Log("player entered: " + collider.tag);
@@ -56,11 +54,6 @@ public class GameController : MonoBehaviour
             HandleWin();
         }
         //else if (collider.tag == _finishPlatformName)
-    }
-
-    public void HandleGameStart()
-    {
-
     }
 
      // Starts timer and show timer onscreen
@@ -110,6 +103,7 @@ public class GameController : MonoBehaviour
        
     }
 
+    // Places formatted time in given placeholder - Text Mesh Pro
     void DisplayTimeInTMP(float timeToDisplay, TMP_Text placeToDisplay, string caption="")
     {
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);

@@ -41,7 +41,9 @@ public class PlayerRigidbodyController : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
         {
-            _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange); //force applied continuously along direction of the force vector (Vector3.up). ForceMode.VelocityChange applies our change to the velocity
+
+            //force applied continuously along direction of the force vector (Vector3.up). ForceMode.VelocityChange applies our change to the velocity
+            _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange); 
         }
     }
 

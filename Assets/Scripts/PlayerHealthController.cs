@@ -13,23 +13,6 @@ public class PlayerHealthController : MonoBehaviour
     private int healthInitial = 3;
     public int healthCurrent;
 
-    // Is called automatically before the first frame update
-    void Start()
-    {
-        _gameController = GetComponent<GameController>();
-        ResetHealth();
-    }
-
-    // Sets player's current health back to its initial value
-    public void ResetHealth()
-    {
-        Time.timeScale = 1;
-        healthCurrent = healthInitial;
-        DrawHeart("0");
-        DrawHeart("1");
-        DrawHeart("2");
-    }
-
     private void EraseHeart(string healthAfter)
     {
         GameObject heart = GameObject.Find(healthAfter);
@@ -54,6 +37,23 @@ public class PlayerHealthController : MonoBehaviour
 
         imgObject.transform.SetParent(_canvas.transform);
         */
+    }
+
+    // Is called automatically before the first frame update
+    void Start()
+    {
+        _gameController = GetComponent<GameController>();
+        ResetHealth();
+    }
+
+    // Sets player's current health back to its initial value
+    public void ResetHealth()
+    {
+        Time.timeScale = 1;
+        healthCurrent = healthInitial;
+        DrawHeart("0");
+        DrawHeart("1");
+        DrawHeart("2");
     }
 
     // Reduces player's current health

@@ -20,18 +20,10 @@ public class PlatformWindController : MonoBehaviour
     [SerializeField]
     private float changeWindTime = 2.0f;
 
-    private GameObject _arrow;
     // Start is called before the first frame update
     void Start()
     {
         ChangeWindDirection();
-        _arrow = GameObject.Find("arrow");
-        // Rotate the cube by converting the angles into a quaternion.
-       // Quaternion target = Quaternion.Euler(tiltAroundX, 0, tiltAroundZ);
-
-        // Dampen towards the target rotation
-       // transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
-        //_arrow.transform.Rotate(90.0f, -90.0f, 0.0f, Space.World);
     }
 
     // Is called when any collider enters trigger of platform

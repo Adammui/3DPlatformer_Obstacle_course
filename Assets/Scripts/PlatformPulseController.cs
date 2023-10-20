@@ -21,18 +21,6 @@ public class PlatformPulseController : MonoBehaviour
     [SerializeField]
     public Material materialInteractive;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // Is called when any collider enters trigger of platform
     void OnTriggerEnter(Collider collider)
     {
