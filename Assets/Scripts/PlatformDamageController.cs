@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlatformPulseController : MonoBehaviour
+public class PlatformDamageController : MonoBehaviour
 {
     [SerializeField]
-    private float pulseChargeTime = 1.0f;
-    [SerializeField]
-    private float pulseCooldownTime = 5.0f;
+    private float atkCooldownTime = 1.0f;
 
-    private bool _isCycling = false;
     private bool _isTrackingPlayer = false;
     PlayerHealthController healthController = null;
 
@@ -18,19 +15,11 @@ public class PlatformPulseController : MonoBehaviour
     public Material materialCharge;
     [SerializeField]
     public Material materialDamage;
-    [SerializeField]
-    public Material materialInteractive;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        NewPulseCycle();
     }
 
     // Is called when any collider enters trigger of platform
@@ -41,14 +30,6 @@ public class PlatformPulseController : MonoBehaviour
         {
             _isTrackingPlayer = true;
             healthController = collider.GetComponent<PlayerHealthController>();
-            
-            // isCycling variable will be true until the end of try
-            // as stated in the task
-            if (!_isCycling) 
-            { 
-                _isCycling = true; 
-                NewPulseCycle();
-            }
         }
     }
 
@@ -65,17 +46,13 @@ public class PlatformPulseController : MonoBehaviour
     // Is called after evety pulse attack of platform
     void NewPulseCycle()
     {
-        Debug.Log("new cycle");
         this.GetComponent<MeshRenderer>().material = materialCharge;
-        StartCoroutine(ChargeCoroutine());
+        StartCoroutine(AttackCoroutine());
     }
 
     // Executes platform's attack
-    private IEnumerator ChargeCoroutine()
+    private IEnumerator AttackCoroutine()
     {
-        Debug.Log("starting charge");
-        yield return new WaitForSeconds(pulseChargeTime);
-
         // changing color of platform to red
         this.GetComponent<MeshRenderer>().material = materialDamage;
         if (_isTrackingPlayer)
@@ -89,15 +66,14 @@ public class PlatformPulseController : MonoBehaviour
         // waiting just a little for player to see red coloring
         yield return new WaitForSeconds(0.1f);
         // changing color back to basic state
-        this.GetComponent<MeshRenderer>().material = materialInteractive;
+        this.GetComponent<MeshRenderer>().material = materialCharge;
         StartCoroutine(CooldownCoroutine());
     }
 
     // Provides cooldown for platform attack cycle
     private IEnumerator CooldownCoroutine()
     {
-        Debug.Log("waiting cooldown");
-        yield return new WaitForSeconds(pulseCooldownTime);
+        yield return new WaitForSeconds(atkCooldownTime);
         NewPulseCycle();
     }
 }

@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class PlayerRigidbodyController : MonoBehaviour
 {
-    public float Speed = 5.0f;
-    public float JumpHeight = 2.0f;
+    [SerializeField]
+    private float Speed = 5.0f;
+    [SerializeField]
+    private float JumpHeight = 2.0f;
+
     private Rigidbody _body; 
     private Vector3 _inputs = Vector3.zero;
 

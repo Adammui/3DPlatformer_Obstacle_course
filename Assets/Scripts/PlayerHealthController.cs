@@ -16,20 +16,6 @@ public class PlayerHealthController : MonoBehaviour
     // Is called automatically before the first frame update
     void Start()
     {
-        // create holder and pic
-        /*
-        GameObject imgObject = new GameObject("a");
-        RectTransform trans = imgObject.AddComponent<RectTransform>();
-        trans.transform.SetParent(_canvas.transform); // setting parent
-        trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
-        trans.sizeDelta = new Vector2(25, 25); // custom size
-        
-        Image image = imgObject.AddComponent<Image>();
-        Sprite img1 = Resources.Load<Sprite>("heart-icon-14");
-        image.GetComponent<Image>().sprite = img1;
-
-        imgObject.transform.SetParent(_canvas.transform);
-        */
         _gameController = GetComponent<GameController>();
         ResetHealth();
     }
@@ -54,21 +40,21 @@ public class PlayerHealthController : MonoBehaviour
     {
         GameObject heart = GameObject.Find(healthDefore);
         heart.SetActive(true);
-    }
-
-    // Handles all the stuff when player looses all hp
-    //public void HandleDeath()
-    //{
+        // create holder and pic
+        /*
+        GameObject imgObject = new GameObject("a");
+        RectTransform trans = imgObject.AddComponent<RectTransform>();
+        trans.transform.SetParent(_canvas.transform); // setting parent
+        trans.anchoredPosition = new Vector2(0f, 0f); // setting position, will be on center
+        trans.sizeDelta = new Vector2(25, 25); // custom size
         
-        //_defeatUI.SetActive(true);
-       // Time.timeScale = 0;
-        // animation
+        Image image = imgObject.AddComponent<Image>();
+        Sprite img1 = Resources.Load<Sprite>("heart-icon-14");
+        image.GetComponent<Image>().sprite = img1;
 
-        // spawn system - reset game
-        // game system counts time from start to finish and shows interface
-        // - win and loose also counts number of deaths
-
-    //}
+        imgObject.transform.SetParent(_canvas.transform);
+        */
+    }
 
     // Reduces player's current health
     public void TakeDamage(int damageAmount)

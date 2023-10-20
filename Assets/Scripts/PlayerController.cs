@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     private CharacterController _characterController;
+    private GameController _gameController;
 
     private Vector2 _input;
     private Vector3 _direction;
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _gameController = GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -41,6 +43,10 @@ public class PlayerController : MonoBehaviour
         ApplyGravity();
         ApplyRotation();
         ApplyMovement();
+        if (!IsGrounded() && _velocity<-10.0f)
+        {
+            _gameController.HandleDefeat();
+        }
     }
 
     // Handling player gravity with simple formula

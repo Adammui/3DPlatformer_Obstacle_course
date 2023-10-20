@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
     private GameObject _endGameUI;
 
     [SerializeField]
-    private TMP_Text _secEnd, _secIngame;
+    private TMP_Text _secEnd, _secIngame, _endgamestate;
 
     // Start is called before the first frame update
     private void Start()
@@ -93,7 +93,7 @@ public class GameController : MonoBehaviour
         TimerEnd();
         //display endgame UI
         _endGameUI.SetActive(true);
-        //TODO: change title
+        _endgamestate.text = "You succeeded!!!";
         DisplayTimeInTMP(_finishTime, _secEnd, "your space voyage time: ");
     }
 
@@ -105,7 +105,7 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0;
         TimerEnd();
         _endGameUI.SetActive(true);
-        //TODO: change title
+        _endgamestate.text = "Defeat..";
         DisplayTimeInTMP(_finishTime, _secEnd, "you wandered to no avail for some time: ");
        
     }

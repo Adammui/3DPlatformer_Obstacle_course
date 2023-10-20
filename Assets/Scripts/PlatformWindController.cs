@@ -8,22 +8,30 @@ public class PlatformWindController : MonoBehaviour
     [SerializeField]
     List<CharacterController> CharactersInWindZoneList = new List<CharacterController>();
 
-    [SerializeField]
-    private Vector3 _windDirection;
+    public Vector3 windDirection;
 
-    private Vector3[] _arrayOfVectors = new[] { new Vector3(0.0f, 0.0f, -1.0f), new Vector3(0.0f, 0.0f, 1.0f), 
-                                                new Vector3(1.0f, 0.0f, 0.0f), new Vector3(-1.0f, 0.0f, -1.0f) };
-
-    [SerializeField]
-    private float _windStrength = 5;
+    private Vector3[] _arrayOfVectors = new[] 
+            { new Vector3(0.0f, -1f, -1.0f), new Vector3(0.0f,  -1f, 1.0f), 
+              new Vector3(1.0f,  -1f, 0.0f), new Vector3(-1.0f,  -1f, -1.0f) };
 
     [SerializeField]
-    private float _changeWindTime = 2.0f;
+    private float windStrength = 5;
 
+    [SerializeField]
+    private float changeWindTime = 2.0f;
+
+    private GameObject _arrow;
     // Start is called before the first frame update
     void Start()
     {
         ChangeWindDirection();
+        _arrow = GameObject.Find("arrow");
+        // Rotate the cube by converting the angles into a quaternion.
+       // Quaternion target = Quaternion.Euler(tiltAroundX, 0, tiltAroundZ);
+
+        // Dampen towards the target rotation
+       // transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
+        //_arrow.transform.Rotate(90.0f, -90.0f, 0.0f, Space.World);
     }
 
     // Is called when any collider enters trigger of platform
@@ -40,12 +48,16 @@ public class PlatformWindController : MonoBehaviour
         CharacterController _characterController = collider.gameObject.GetComponent<CharacterController>();
         if (_characterController != null)
             CharactersInWindZoneList.Remove(_characterController);
+        
     }
+
+    //Randomized change of wind direction
     private void ChangeWindDirection()
     {
         System.Random random = new System.Random();
         int randomDir = random.Next(0, _arrayOfVectors.Length);
-        _windDirection = _arrayOfVectors[randomDir];
+        windDirection = _arrayOfVectors[randomDir];
+       
         StartCoroutine(ChangeWindCoroutine());
     }
 
@@ -56,15 +68,18 @@ public class PlatformWindController : MonoBehaviour
         {
             foreach (CharacterController u in CharactersInWindZoneList)
             {
-                u.Move(_windDirection * _windStrength * Time.deltaTime);
+                
+                 Vector3 WindVelocity = windDirection * windStrength * Time.deltaTime;
+                 u.Move(windDirection * windStrength * Time.deltaTime);
+                
             }
         }
     }
     // Provides cooldown for wind direction change
     private IEnumerator ChangeWindCoroutine()
     {
-        yield return new WaitForSeconds(_changeWindTime);
-        Debug.Log("changing wind");
+        yield return new WaitForSeconds(changeWindTime);
+        //Debug.Log("changing wind");
         ChangeWindDirection();
     }
 }
