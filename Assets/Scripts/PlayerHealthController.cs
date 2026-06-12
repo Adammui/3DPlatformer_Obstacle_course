@@ -61,7 +61,7 @@ public class PlayerHealthController : MonoBehaviour
     {
         healthCurrent -= damageAmount;
         EraseHeart(healthCurrent.ToString());
-
+        Debug.Log("current players health: "+ healthCurrent);
         if (healthCurrent <= 0)
         {
             _gameController.HandleDefeat();
@@ -73,6 +73,8 @@ public class PlayerHealthController : MonoBehaviour
     {
         DrawHeart(healthCurrent.ToString());
         healthCurrent += healAmount;
+        
+        Debug.Log("current players health: "+ healthCurrent);
         if (healthCurrent > healthInitial)
         {
             ResetHealth();

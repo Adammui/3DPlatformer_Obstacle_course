@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51be94fa6edd40faa856e8ef0eea2505, type: 3}
+  m_Name: HintPulseConfig
+  m_EditorClassIdentifier: 
+  materialCharge: {fileID: 2100000, guid: b385e489452ced741b9b534941aaa063, type: 2}
+  materialDamage: {fileID: 2100000, guid: f016921aec5cfa543866332833b6e874, type: 2}
+  materialInteractive: {fileID: 2100000, guid: 86b079ded6ee77740a815d342105acba, type: 2}
