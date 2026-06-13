@@ -1,29 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using Gameplay;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using Zenject;
 
-public class StartUIController : MonoBehaviour
+namespace UI
 {
-    public string levelScene;
-    // Start is called before the first frame update
-    void Start()
+    public class StartUIController : MonoBehaviour
     {
-       
-    }
-
-    public void CloseGame()
-    {
-        Application.Quit();
-    }
-    public void LoadScene()
-    {
-        SceneManager.LoadScene(levelScene);
-    }
-    public void ReloadScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        private SceneLoader _sceneLoader;
+        [Inject]
+        private void Construct(SceneLoader sceneLoader)
+        {
+            _sceneLoader = sceneLoader;
+        }
+        public void CloseGame()
+        {
+            Application.Quit();
+        }
+        public void LoadScene()
+        {
+            _sceneLoader.LoadLevel();
+        }
+        public void ReloadScene()
+        {
+            _sceneLoader.ReloadLevel();
+        }
     }
 }

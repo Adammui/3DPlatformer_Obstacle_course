@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e655620330047a4a0af47795a4e0a33, type: 3}
   m_Name: 1LevelConfig
   m_EditorClassIdentifier: 
+  _prefab: {fileID: 6565640588164529393, guid: dc995dd27f931704d827f2d9244e5473, type: 3}
