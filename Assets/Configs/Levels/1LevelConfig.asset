@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7678bca7afda404b8d192024f091171d, type: 3}
-  m_Name: WindPlatformConfig
+  m_Script: {fileID: 11500000, guid: 6e655620330047a4a0af47795a4e0a33, type: 3}
+  m_Name: 1LevelConfig
   m_EditorClassIdentifier: 
-  damage: 0
-  cooldown: 0
-  prefab: 0
-  isAlwaysActive: 1
-  PulseConfig: {fileID: 0}
+  _prefab: {fileID: 7774159987972463143, guid: dc995dd27f931704d827f2d9244e5473, type: 3}
