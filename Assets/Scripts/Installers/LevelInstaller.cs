@@ -27,7 +27,8 @@ namespace Installers
             Container.Bind<PlatformWindController>().AsSingle().NonLazy();
             
             Container.Bind<LevelConfig>().FromInstance(_config.LevelConfigs[_playerStats.CurrentLevel]).AsSingle();
-            
+            Container.Bind<LevelExitPoint>().FromNew().AsSingle().NonLazy();
+            Container.Bind<IExitPoint>().To<LevelExitPoint>().FromResolve();
             Container.Bind<ContextLifetime>().FromNew().AsSingle().NonLazy();
             
 
