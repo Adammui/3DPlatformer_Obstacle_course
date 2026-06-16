@@ -8,13 +8,11 @@ namespace Gameplay.Platforms
     [Serializable]
     public abstract class IPlatform
     {
-        public abstract bool IsActive { get; set; }
-        [SerializeField] public PlatformConfig Config;
-        [SerializeField] public HintObject HintObj;
-        public abstract void Update(float deltaTime);
-        public abstract void OnPlayersAffectedChanged(List<CharacterController> playersAffected);
-        public abstract void TurnOn();
-        public abstract void TurnOff();
-        public abstract event Action<HintUpdateContext> OnHintUpdate;
+        private PlatformConfig _config;
+        public PlatformConfig Config { get; set; }
+        
+        public abstract void Update(PlatformObject obj, float deltaTime);
+        public abstract void TurnOn(PlatformObject obj);
+        public abstract void TurnOff(PlatformObject obj);
     }
 }

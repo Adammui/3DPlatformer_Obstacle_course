@@ -1,4 +1,5 @@
 ﻿using Gameplay;
+using Gameplay.Player;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +12,7 @@ namespace Installers
         {
             Container.Bind<SceneLoader>().FromNew().AsSingle().NonLazy();
             Container.Bind<MainConfig>().FromInstance(_mainConfig).AsSingle().NonLazy();
+            Container.Bind<PlayerStats>().FromNew().AsSingle().NonLazy();
         }
     }
 }

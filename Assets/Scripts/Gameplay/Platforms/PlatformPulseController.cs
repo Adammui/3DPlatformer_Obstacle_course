@@ -6,83 +6,69 @@ using UnityEngine;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Gameplay.Platforms.Hints;
+using Gameplay.Player;
+using Installers;
 
 namespace Gameplay.Platforms
 {
     [Serializable]
     public class PlatformPulseController : IPlatform
     {
-        [SerializeField] private float pulseChargeTime = 1.0f;
-        [SerializeField] private float pulseCooldownTime = 5.0f;
-        
-        private List<CharacterController> playersAffectedByPlatform = new List<CharacterController>();
+        private readonly ContextLifetime _contextLifetime;
+        private readonly HintPulseConfig _hintConfig;
     
-        public override event Action<HintUpdateContext> OnHintUpdate;
-        public override bool IsActive { get; set; }
-        public PlatformPulseController()
+        private float pulseChargeTime = 1.0f;
+        private float pulseCooldownTime = 2.0f;
+        public PlatformPulseController(MainConfig mainConfig, ContextLifetime contextLifetime)
         {
-            IsActive = false;
+            _contextLifetime = contextLifetime;
+            Config = mainConfig.PulseConfig;
+            _hintConfig = mainConfig.HintPulseConfig;
         }
-
-        public override void Update(float deltaTime)
-        {
-        }
-
-        public override void TurnOn()
+        public override void Update(PlatformObject obj,float deltaTime) { }
+        public override void TurnOn(PlatformObject obj)
         { 
-            if (!IsActive) 
+            Debug.Log("platform turned on"+obj.gameObject.name);
+            if (!obj.IsActive) 
             { 
-                IsActive = true; 
-                HintObj.ShowHint();
-                NewPulseCycle();
+                obj.IsActive = true; 
+                obj.HintObj.ShowHint();
+                StartPulse(obj).Forget();
             }
         }
-
-        public override void TurnOff()
-        {
-            // if (IsActive)
-            // {
-            //     await currentCycle;
-        }
-        private async UniTaskVoid NewPulseCycle()
+        public override void TurnOff(PlatformObject obj) { 
+            Debug.Log("platform turned off"+obj.gameObject.name);}
+        private async UniTaskVoid StartPulse(PlatformObject obj)
         {
             Debug.Log("new cycle");
-            OnHintUpdate?.Invoke(new HintUpdateContext(Vector3.zero,Config.PulseConfig.materialCharge));
-            await StartPulseCycleAsync(CancellationToken.None);
+            obj.HintObj.UpdateHint(new HintUpdateContext(Vector3.zero,_hintConfig.materialCharge));
+            await PulseCycleAsync(obj,_contextLifetime.Token);
         }
-        public async UniTask StartPulseCycleAsync(CancellationToken token)
+        public async UniTask PulseCycleAsync(PlatformObject obj, CancellationToken token)
         { 
-            Debug.Log("starting charge");
+            Debug.Log("starting charge"+obj.gameObject.name);
             await UniTask.Delay(TimeSpan.FromSeconds(pulseChargeTime), cancellationToken: token);
-        
-            // changing color of platform to red
-            OnHintUpdate?.Invoke(new HintUpdateContext(Vector3.zero,Config.PulseConfig.materialDamage));
-            if (playersAffectedByPlatform.Count > 0)
-            {
-                foreach (var player in playersAffectedByPlatform)
-                {
-                    // damage player for 1 health point
-                    player.GetComponent<PlayerHealthController>()?.TakeDamage(1);
-
-                    Debug.Log("deal damage");
-                }
-            }
-            // waiting just a little for player to see red coloring
-            await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: token);
-             // changing color back to basic state
-            OnHintUpdate?.Invoke(new HintUpdateContext(Vector3.zero,Config.PulseConfig.materialInteractive));
-            await UniTask.Delay(TimeSpan.FromSeconds(pulseCooldownTime), cancellationToken: token);
-            if(playersAffectedByPlatform.Count > 0) NewPulseCycle();
+            
+           obj.HintObj.UpdateHint(new HintUpdateContext(Vector3.zero,_hintConfig.materialDamage));
+            if (obj.charactersOnPlatformList.Count > 0)
+                foreach (var player in obj.charactersOnPlatformList)
+                    player.GetComponent<PlayerHealthController>()?.TakeDamage(Config.Damage);
+            await UniTask.Delay(TimeSpan.FromSeconds(0.1f), cancellationToken: token); // waiting just a little for player to see red coloring
+            
+            await EndPulseAsync(obj,token);
+        }
+        private async UniTask EndPulseAsync(PlatformObject obj, CancellationToken token)
+        {
+            Debug.Log("ending"+obj.gameObject.name);
+            obj.HintObj.UpdateHint(new HintUpdateContext(Vector3.zero,_hintConfig.materialInteractive));
+            await UniTask.Delay(TimeSpan.FromSeconds(pulseCooldownTime), cancellationToken: token); //cooldown
+            if (obj.charactersOnPlatformList.Count > 0) 
+                StartPulse(obj).Forget();
             else 
             {
-                IsActive = false;
-                HintObj.StopHint();
+                obj.IsActive = false;
+                obj.HintObj.StopHint();
             }
-        }
-        
-        public override void OnPlayersAffectedChanged(List<CharacterController> playersAffected)
-        {
-            playersAffectedByPlatform = playersAffected;
         }
     }
 }

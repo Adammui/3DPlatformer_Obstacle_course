@@ -1,72 +1,63 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Installers;
 using UnityEngine;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 namespace Gameplay.Platforms
 {
-    [Serializable]
     public class PlatformWindController : IPlatform
     {
-        [SerializeField] private readonly float windStrength = 5;
-        [SerializeField] private readonly float changeWindTime = 2.0f;
-        private readonly Vector3[] _arrayOfVectors = new[] 
+        private readonly ContextLifetime _contextLifetime;
+        private const float windStrength = 5;
+        private const float changeWindTime = 2.0f;
+        private Vector3[] _arrayOfVectors = new[] 
         { new Vector3(0.0f, -1f, -1.0f), new Vector3(0.0f,  -1f, 1.0f), 
             new Vector3(1.0f,  -1f, 0.0f), new Vector3(-1.0f,  -1f, -1.0f) };
-        private readonly Random _random = new Random();
         private Vector3 _windDirection;
-        private List<CharacterController> playersAffectedByPlatform = new List<CharacterController>();
-        
-        public override event Action<HintUpdateContext> OnHintUpdate;
-        public override bool IsActive { get; set; }
-        
-        public PlatformWindController()
+        public PlatformWindController(MainConfig mainConfig, ContextLifetime contextLifetime)
         {
-            IsActive = false;
+            _contextLifetime = contextLifetime;
+            Config = mainConfig.WindСonfig;
         }
-
-        //todo
-        public override void Update(float deltaTime)
+        public override void Update(PlatformObject obj,float deltaTime)
         {
             //or update hint here if its other platform
-            if (IsActive & playersAffectedByPlatform.Count > 0)
+            if (obj.IsActive & obj.charactersOnPlatformList.Count!=0)
             {
-                foreach (CharacterController u in playersAffectedByPlatform)
+                foreach (CharacterController u in obj.charactersOnPlatformList)
                 {
-                    Vector3 windVelocity = _windDirection * windStrength * Time.deltaTime;
-                    u.Move(_windDirection * windStrength * Time.deltaTime);
+                    Vector3 windVelocity = _windDirection * (windStrength * Time.deltaTime);
+                    u.Move(windVelocity);
                 }
             }
         }
-        
-        public override async void TurnOn()
-        { 
-            IsActive = true;
-            HintObj.ShowHint();
-            while (IsActive) 
+        private async UniTask ChangeCycleAsync(PlatformObject obj, CancellationToken token)
+        {
+            while (obj.IsActive) 
             { 
-                await Task.Delay(TimeSpan.FromSeconds(changeWindTime)); 
-                ChangeWindDirection(); 
+                ChangeWindDirection(obj); 
+                await UniTask.Delay(TimeSpan.FromSeconds(changeWindTime),cancellationToken:token); 
             }
         }
-        public override void TurnOff()
+        public override void TurnOn(PlatformObject obj)
         {
-            IsActive = false;
-            HintObj.StopHint();
+            obj.IsActive = true;
+            obj.HintObj.ShowHint();
+            ChangeCycleAsync(obj,_contextLifetime.Token).Forget();
         }
-        private void ChangeWindDirection()
+        public override void TurnOff(PlatformObject obj)
         {
-            var randomDir = _random.Next(0, _arrayOfVectors.Length);
+            obj.IsActive = false;
+            obj.HintObj.StopHint();
+        }
+        private void ChangeWindDirection(PlatformObject obj)
+        {
+            int randomDir = Random.Range(0, _arrayOfVectors.Length);
             _windDirection = _arrayOfVectors[randomDir];
             //in wind platforms updating hints only needed when changing direction, not in update
-            OnHintUpdate?.Invoke(new HintUpdateContext(_windDirection));
-        }
-        
-        public override void OnPlayersAffectedChanged(List<CharacterController> playersAffected)
-        {
-            playersAffectedByPlatform = playersAffected;
+            obj.HintObj.UpdateHint(new HintUpdateContext(_windDirection));
         }
     }
 }

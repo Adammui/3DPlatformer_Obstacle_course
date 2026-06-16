@@ -19,7 +19,7 @@ namespace Gameplay.Platforms
        }
        public abstract void Update(HintUpdateContext context, GameObject hintObject);
     }
-    public class HintUpdateContext
+    public struct HintUpdateContext
     {
         public Vector3 WindDirection;
         public Material MaterialColor;

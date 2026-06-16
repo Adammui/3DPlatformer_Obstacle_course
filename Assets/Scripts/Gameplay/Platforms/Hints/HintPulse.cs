@@ -16,7 +16,5 @@ namespace Gameplay.Platforms.Hints
                 renderer.material = data.MaterialColor;
             }
         }
-        //менять цвета платформы согласно скрипту тут будут ифы которые берут из хит конфига цвета материалов
-        
     }
 }

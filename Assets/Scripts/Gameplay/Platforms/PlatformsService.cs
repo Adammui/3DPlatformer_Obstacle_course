@@ -1,80 +1,88 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Installers;
 using Unity.VisualScripting;
+using Unity.XR.Oculus.Input;
 using UnityEngine;
 
 namespace Gameplay.Platforms
 {
-    public class PlatformsService :MonoBehaviour
+    public class PlatformsService
     {
-        private Dictionary<PlatformObject, IPlatform> _platforms = new Dictionary<PlatformObject, IPlatform>();
-
-        //убрать если не понадобиться
-        private readonly Dictionary<PlatformObject, bool> _activatedPlatforms = new();
+        private readonly MainConfig _mainConfig;
+        private readonly ContextLifetime _contextLifetime;
+        private readonly Dictionary<PlatformType, IPlatform> controllers = new();
+        private List<PlatformObject> _platforms = new ();
         
-        public PlatformsService()
+        public PlatformsService(MainConfig mainConfig, ContextLifetime contextLifetime)
         {
-            //создать депенденси
-            //добавить в _platforms все платформы из level config( там IDictionary<PlatformType, PlatformConfig> Configs )
-            //записать все обьекты платформ в _activatedPlatforms и установить bool в false
+            _mainConfig = mainConfig;
+            _contextLifetime = contextLifetime;
+            foreach (var type in Enum.GetValues(typeof(PlatformType)).Cast<PlatformType>())
+            {
+                controllers.Add(type, GetController(type));
+            }
         }
-
-        //todo
-        public void Update(float deltaTime)
+        public void Update()
         {
-            //добавляем дельту времени к кулдаунам платформ , сравниваем с конфигом кулдаун и если кулдаун закончился вызываем метод дамага из платформы класса (fixed upd)
+            float dt = Time.deltaTime;
+            foreach ( PlatformObject obj in _platforms)
+            {
+                controllers[obj.PlatformType].Update(obj,dt);
+            }
         }
-        
-        //todo from entry point
-        public void Create(List<PlatformObject> platforms)
+        public void InitializePlatforms(PlatformObject[] platforms)
         {
             _platforms.Clear();
             foreach (PlatformObject obj in platforms)
-            {
-                if(obj !=null && obj.Platform !=null)
-                    _platforms.Add(obj,obj.Platform);
-                Debug.Log(obj.Platform);
-            }
+                if(obj !=null)
+                    _platforms.Add(obj);
             
-            
-            foreach (PlatformObject obj in _platforms.Keys) // для каждого обьекта платформы на уровне
+            foreach (PlatformObject obj in _platforms) // для каждого обьекта платформы на уровне
             {
-                obj.OnPlayersListChanged += obj.Platform.OnPlayersAffectedChanged;
+                // foreach (PlatformType type in controllers.Keys)// для каждого типа платформ
+                // {
+                //     if (obj.PlatformType == type)
+                //     {
+                //         controllers[type].OnHintUpdate += obj.HintObj.UpdateHint; //для каждого типа платформ подписать только платформам этого типа
+                //         if (controllers[type].Config.IsAlwaysActive) controllers[type].TurnOn(obj); //конфиг лежит в типе
+                //     }
+                // }
+                if ( controllers[obj.PlatformType].Config.IsAlwaysActive) 
+                    controllers[obj.PlatformType].TurnOn(obj); //конфиг лежит в типе
+                
                 obj.OnPlatformInteracted += OnPlatformInteraction;
-            }
-            foreach (IPlatform platform in _platforms.Values) // для каждого типа платформ
-            {
-                    platform.OnHintUpdate += platform.HintObj.UpdateHint;
-                if (platform.Config.IsAlwaysActive) platform.TurnOn(); // todo что-то не так как будто
             }
         }
         //todo exit point
         public void Dispose()
         {
-            foreach (PlatformObject obj in _platforms.Keys)
+            foreach (PlatformObject obj in _platforms)
             {
-                obj.OnPlayersListChanged -= obj.Platform.OnPlayersAffectedChanged;
+                if ( controllers[obj.PlatformType].Config.IsAlwaysActive)
+                    controllers[obj.PlatformType].TurnOff(obj);
+                
                 obj.OnPlatformInteracted -= OnPlatformInteraction;
             }
-            foreach (IPlatform platform in _platforms.Values)
-            {
-                platform.OnHintUpdate -= platform.HintObj.UpdateHint;
-                platform.TurnOff();
-            }
+            _platforms.Clear();
         }
         private void OnPlatformInteraction(PlatformObject obj, int players)
         {
-            Debug.Log("cbuybfk");
-            if (players > 0)
+            Debug.Log("player stepped in or out of platform");
+            
+            Action<PlatformObject> action = players>0 ? controllers[obj.PlatformType].TurnOn : controllers[obj.PlatformType].TurnOff;
+            if (!controllers[obj.PlatformType].Config.IsAlwaysActive)
+                action(obj);
+        }
+        private IPlatform GetController(PlatformType type)
+        {
+            return type switch
             {
-                _activatedPlatforms[obj] = true;
-                if(!obj.Platform.Config.IsAlwaysActive) obj.Platform.TurnOn();
-            }
-            else
-            {
-                _activatedPlatforms[obj] = false;
-                if(!obj.Platform.Config.IsAlwaysActive) obj.Platform.TurnOff();
-            }
+                PlatformType.Wind => new PlatformWindController(_mainConfig,_contextLifetime),
+                PlatformType.Pulse => new PlatformPulseController(_mainConfig,_contextLifetime),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
         }
     }
 }

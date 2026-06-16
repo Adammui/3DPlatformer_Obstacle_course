@@ -12,17 +12,14 @@ namespace Gameplay.Platforms
     {
         public const string Name = "Platforms/";
 
-        [SerializeField] private float damage;
+        [SerializeField] private int damage;
         [SerializeField] private float cooldown;
         [SerializeField] private PrefabAssetType prefab;
         [SerializeField] private bool isAlwaysActive;
-        [SerializeField] public HintPulseConfig PulseConfig;
 
-        public float Damage => damage;
+        public int Damage => damage;
         public float Cooldown => cooldown;
         public PrefabAssetType Prefab => prefab;
         public bool IsAlwaysActive => isAlwaysActive;
-        
-       // public abstract IPlatform CreatePlatform(PlatformDependencies dependencies);
     }
 }

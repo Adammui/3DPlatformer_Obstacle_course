@@ -2,9 +2,8 @@
 {
     public enum PlatformType
     {
-        PlatformWindController,
-        PlatformPulseController,
-        PlatformDamageController
-        ,
+        Wind,
+        Pulse,
+      //  Damage,
     }
 }

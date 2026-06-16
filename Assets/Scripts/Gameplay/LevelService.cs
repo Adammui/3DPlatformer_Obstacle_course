@@ -1,19 +1,21 @@
-﻿using UnityEngine;
+﻿using Gameplay.Platforms;
+using UnityEngine;
 
 namespace Gameplay
 {
     public class LevelService
     {
         private readonly MainConfig _mainConfig;
-
-        public LevelService(MainConfig mainConfig)
+        private readonly LevelConfig _levelConfig;
+        
+        public LevelService(MainConfig mainConfig, LevelConfig levelConfig)
         {
             _mainConfig = mainConfig;
+            _levelConfig = levelConfig;
         }
-
-        public void SpawnLevel()
+        public Level SpawnLevel()
         {
-            GameObject.Instantiate(_mainConfig.LevelConfig.Prefab);
+            return GameObject.Instantiate(_levelConfig.Prefab);
         }
     }
 }
