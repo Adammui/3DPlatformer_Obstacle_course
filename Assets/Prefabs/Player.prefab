@@ -106,9 +106,7 @@ GameObject:
   - component: {fileID: 2596194998955602129}
   - component: {fileID: 2596194998955602128}
   - component: {fileID: 2596194998955602130}
-  - component: {fileID: 2596194998955602132}
   - component: {fileID: 2596194998955602141}
-  - component: {fileID: 2596194998955602135}
   - component: {fileID: 2596194998955602123}
   - component: {fileID: 2596194998955602122}
   m_Layer: 0
@@ -203,24 +201,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2596194998955602132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2596194998955602140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74d03f4b1a3f6f44d9423dde01affe97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _startTime: 0
-  _finishTime: 0
-  _timerIsRunning: 0
-  _endGameUI: {fileID: 0}
-  _secEnd: {fileID: 0}
-  _secIngame: {fileID: 0}
 --- !u!114 &2596194998955602141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,25 +213,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39ae52ef905fd64480f4259c959c5aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterController: {fileID: 0}
   gravityMultiplier: 1
   speed: 5
   smoothTime: 0.05
   jumpPower: 4
   animator: {fileID: 2596195000028889513}
---- !u!114 &2596194998955602135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2596194998955602140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d197a5a06b8f28a47be5c87e2b4cd768, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthInitial: 3
-  healthCurrent: 0
 --- !u!136 &2596194998955602123
 CapsuleCollider:
   m_ObjectHideFlags: 0
