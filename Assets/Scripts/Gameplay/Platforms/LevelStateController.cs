@@ -78,6 +78,6 @@ public class LevelStateController
     {
         TimerEnd();
         _levelScreenPresenter.CloseScreen();
-        _endScreenPresenter.ShowScreen( "Defeat.."+ "\n You wandered to no avail for some time: "+ _finishTime);
+        _endScreenPresenter.ShowScreen( "Defeat.."+ "\nYou wandered to no avail for some time: "+ _finishTime);
     }
 }
