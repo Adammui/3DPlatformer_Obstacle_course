@@ -2,6 +2,8 @@
 using Gameplay.Platforms;
 using Gameplay.Platforms.Hints;
 using Gameplay.Player;
+using UI;
+using UnityEngine;
 using Zenject;
 
 namespace Installers
@@ -10,7 +12,9 @@ namespace Installers
     {
         private MainConfig _config;
         private PlayerStats _playerStats;
-
+        [SerializeField] private LevelUI _levelUI;
+        [SerializeField] private PlayerController _playerController;
+        
         [Inject]
         private void Construct(MainConfig config,PlayerStats playerStats)
         {
@@ -30,8 +34,13 @@ namespace Installers
             Container.Bind<LevelExitPoint>().FromNew().AsSingle().NonLazy();
             Container.Bind<IExitPoint>().To<LevelExitPoint>().FromResolve();
             Container.Bind<ContextLifetime>().FromNew().AsSingle().NonLazy();
-            
-
+            Container.Bind<LevelScreenPresenter>().AsSingle().NonLazy();
+            Container.Bind<LevelUI>().FromInstance(_levelUI).AsSingle().NonLazy();
+            Container.Bind<UIService>().To<LevelUI>().FromResolve();
+            Container.Bind<PlayerController>().To<PlayerController>().FromInstance(_playerController).AsSingle().NonLazy();
+            Container.Bind<PlayerDeathController>().FromNew().AsSingle().NonLazy();
+            Container.Bind<LevelStateController>().FromNew().AsSingle().NonLazy();
+            Container.Bind<EndScreenPresenter>().FromNew().AsSingle().NonLazy();
         }
     }
 }

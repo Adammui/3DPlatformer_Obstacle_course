@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gameplay.Player;
 using Installers;
 using Unity.VisualScripting;
 using Unity.XR.Oculus.Input;
@@ -12,13 +13,15 @@ namespace Gameplay.Platforms
     {
         private readonly MainConfig _mainConfig;
         private readonly ContextLifetime _contextLifetime;
+        private readonly PlayerStats _playerStats;
         private readonly Dictionary<PlatformType, IPlatform> controllers = new();
         private List<PlatformObject> _platforms = new ();
         
-        public PlatformsService(MainConfig mainConfig, ContextLifetime contextLifetime)
+        public PlatformsService(MainConfig mainConfig, ContextLifetime contextLifetime, PlayerStats playerStats)
         {
             _mainConfig = mainConfig;
             _contextLifetime = contextLifetime;
+            _playerStats = playerStats;
             foreach (var type in Enum.GetValues(typeof(PlatformType)).Cast<PlatformType>())
             {
                 controllers.Add(type, GetController(type));
@@ -39,23 +42,14 @@ namespace Gameplay.Platforms
                 if(obj !=null)
                     _platforms.Add(obj);
             
-            foreach (PlatformObject obj in _platforms) // для каждого обьекта платформы на уровне
+            foreach (PlatformObject obj in _platforms)
             {
-                // foreach (PlatformType type in controllers.Keys)// для каждого типа платформ
-                // {
-                //     if (obj.PlatformType == type)
-                //     {
-                //         controllers[type].OnHintUpdate += obj.HintObj.UpdateHint; //для каждого типа платформ подписать только платформам этого типа
-                //         if (controllers[type].Config.IsAlwaysActive) controllers[type].TurnOn(obj); //конфиг лежит в типе
-                //     }
-                // }
                 if ( controllers[obj.PlatformType].Config.IsAlwaysActive) 
-                    controllers[obj.PlatformType].TurnOn(obj); //конфиг лежит в типе
+                    controllers[obj.PlatformType].TurnOn(obj);
                 
                 obj.OnPlatformInteracted += OnPlatformInteraction;
             }
         }
-        //todo exit point
         public void Dispose()
         {
             foreach (PlatformObject obj in _platforms)
@@ -80,7 +74,7 @@ namespace Gameplay.Platforms
             return type switch
             {
                 PlatformType.Wind => new PlatformWindController(_mainConfig,_contextLifetime),
-                PlatformType.Pulse => new PlatformPulseController(_mainConfig,_contextLifetime),
+                PlatformType.Pulse => new PlatformPulseController(_mainConfig,_contextLifetime, _playerStats),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
         }

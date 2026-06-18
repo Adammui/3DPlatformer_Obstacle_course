@@ -6,48 +6,27 @@ namespace Gameplay.Player
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
-        private CharacterController _characterController;
-        private GameController _gameController;
-
+        [SerializeField] private CharacterController _characterController;
+        [SerializeField] private float gravityMultiplier = 3.0f;
+        [SerializeField] private float speed;
+        [SerializeField] private float smoothTime = 0.05f;
+        [SerializeField] private float jumpPower;
+        [SerializeField] private Animator animator;
+        
         private Vector2 _input;
         private Vector3 _direction;
         private float _currentVelocity;
-        private float _velocity;
         private float _gravity = -9.81f;
-
-        [SerializeField] 
-        private float gravityMultiplier = 3.0f;
-
-        [SerializeField] 
-        private float speed;
-
-        [SerializeField] 
-        private float smoothTime = 0.05f;
-
-        [SerializeField] 
-        private float jumpPower;
-
-        [SerializeField] 
-        private Animator animator;
-
-        private bool IsGrounded() => _characterController.isGrounded;
-
-        private void Awake()
-        {
-            _characterController = GetComponent<CharacterController>();
-            _gameController = GetComponent<GameController>();
-        }
+        private float _velocity;
+        public float Velocity => _velocity;
+        public bool IsGrounded() => _characterController.isGrounded;
 
         // Update is called once per frame
-        private void Update()
+        public void OnUpdate()
         {
             ApplyGravity();
             ApplyRotation();
             ApplyMovement();
-            if (!IsGrounded() && _velocity<-10.0f)
-            {
-                _gameController.HandleDefeat();
-            }
         }
 
         // Handling player gravity with simple formula

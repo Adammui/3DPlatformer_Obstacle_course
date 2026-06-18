@@ -7,7 +7,9 @@ namespace Gameplay
     {
         private readonly MainConfig _mainConfig;
         private readonly LevelConfig _levelConfig;
-        
+        private Level _levelObject;
+        public Level LevelObject => _levelObject;
+
         public LevelService(MainConfig mainConfig, LevelConfig levelConfig)
         {
             _mainConfig = mainConfig;
@@ -15,7 +17,12 @@ namespace Gameplay
         }
         public Level SpawnLevel()
         {
-            return GameObject.Instantiate(_levelConfig.Prefab);
+            _levelObject = GameObject.Instantiate(_levelConfig.Prefab);
+            return _levelObject;
+        }
+        public void Dispose()
+        {
+            GameObject.Destroy(_levelObject.gameObject);
         }
     }
 }
